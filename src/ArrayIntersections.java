@@ -5,13 +5,13 @@ public class ArrayIntersections {
         int[] allIntersectingNumbers = new int[firstArray.length];
         int[] arrayAfterIntersection ;
         int intersections = 0;
-        int k = 0;
+        int newArrayIndex = 0;
         for (int value : firstArray) {
             for (int valueOfSecondArray : secondArray)
                 if (value == valueOfSecondArray) {
                     {
-                        allIntersectingNumbers[k] = value;
-                        k++;
+                        allIntersectingNumbers[newArrayIndex] = value;
+                        newArrayIndex++;
                         intersections++;
                     }
                 }
@@ -26,17 +26,16 @@ public class ArrayIntersections {
     public  static boolean isStrangerArrays(int[]firstArray,int[] secondArray){
         int[]isIntersecting;
         isIntersecting=intersecting2DigitArrays(firstArray,secondArray);
-        for (int i=0;i<isIntersecting.length;i++){
-            if(isIntersecting[i]!=0)
+        for (int value : isIntersecting) {
+            if (value != 0)
                 return false;
         }
         return true;
     }
 
     public static void main(String[] args) {
-
-        //System.out.println(Arrays.toString(intersecting2DigitArrays(new int[]{}, new int[]{3})));
-       // System.out.println(isStrangerArrays(new int[]{1, 8,3, 5, 6,}, new int[]{4, 7, 4, 2}));
+        System.out.println(Arrays.toString(intersecting2DigitArrays(new int[]{1,3,4}, new int[]{3,7})));
+        System.out.println(isStrangerArrays(new int[]{1, 8,3, 5, 6,}, new int[]{4, 7,5,3, 4, 2}));
     }
 }
 

@@ -12,15 +12,15 @@ public class PrintBiggerThenAverage {
         for (int i = 0; i < userNumbersInput.length; i++) {
             userNumbersInput[i] = scanner.nextDouble();
         }
-        for (double j : userNumbersInput) {
-            sum += j;
+        for (double numberFromUser : userNumbersInput) {
+            sum += numberFromUser;
         }
         average = sum / userNumbersInput.length;
         System.out.println("the average is " + average + "  here are the numbers that is bigger then average: ");
 
-        for (double i : userNumbersInput) {
-            if (i > average) {
-                System.out.println(i);
+        for (double numberFromUser : userNumbersInput) {
+            if (numberFromUser > average) {
+                System.out.println(numberFromUser);
             }
         }
     }
