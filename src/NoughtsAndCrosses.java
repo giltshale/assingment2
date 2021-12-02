@@ -15,53 +15,32 @@ public class NoughtsAndCrosses {
     }
 
     public static boolean isAvailable(char[] board, int location) {
-
-        return board[Math.abs(location - 1)] != 'X' && board[Math.abs(location - 1)] != 'O';
+        if (1 > location || location > 9)
+            return false;
+        else
+            return board[Math.abs(location - 1)] != 'X' && board[Math.abs(location - 1)] != 'O';
     }
 
     public static char checkWinner(char[] board) {
-        if (board[0] == 'X' && board[1] == 'X' && board[2] == 'X')
-            return 'X';
-        else if (board[0] == 'O' && board[1] == 'O' && board[2] == 'O')
-            return 'O';
+        char drawOrBoardIsFull = ' ';
+        for (int i = 0; i < JUMP_ROW; i += JUMP_ROW) {
+            if (board[i] == board[i + 1] && board[i] == board[i + 2])
+                return board[i];
+        }
+        for (int i = 0; i < JUMP_ROW; i++) {
+            if (board[i] == board[i + JUMP_ROW] && board[i] == board[i + 2 * JUMP_ROW])
+                return board[i];
+        }
+        if (boardIsFull(board)) {
+            drawOrBoardIsFull = '-';
+            return drawOrBoardIsFull;
+        }
+        if (board[0] == board[4] && board[4] == board[8])
+            return board[4];
+        else if (board[2] == board[4] && board[4] == board[6])
+            return board[4];
 
-        else if (board[3] == 'X' && board[4] == 'X' && board[5] == 'X')
-            return 'X';
-        else if (board[3] == 'O' && board[4] == 'O' && board[5] == 'O')
-            return 'O';
-
-
-        else if (board[6] == 'X' && board[7] == 'X' && board[8] == 'X')
-            return 'X';
-        else if (board[6] == 'O' && board[7] == 'O' && board[8] == 'O')
-            return 'O';
-
-
-        else if (board[0] == 'X' && board[3] == 'X' && board[6] == 'X')
-            return 'X';
-        else if (board[0] == 'O' && board[3] == 'O' && board[6] == 'O')
-            return 'O';
-
-        else if (board[1] == 'X' && board[4] == 'X' && board[7] == 'X')
-            return 'X';
-        else if (board[1] == 'O' && board[4] == 'O' && board[7] == 'O')
-            return 'O';
-
-        else if (board[2] == 'X' && board[5] == 'X' && board[8] == 'X')
-            return 'X';
-        else if (board[2] == 'O' && board[5] == 'O' && board[8] == 'O')
-            return 'O';
-
-        else if (board[0] == 'X' && board[4] == 'X' && board[8] == 'X')
-            return 'X';
-        else if (board[0] == 'O' && board[4] == 'O' && board[8] == 'O')
-            return 'O';
-
-        else if (board[2] == 'X' && board[4] == 'X' && board[6] == 'X')
-            return 'X';
-        else if (board[2] == 'O' && board[4] == 'O' && board[6] == 'O')
-            return 'O';
-        return '-';
+        return drawOrBoardIsFull;
     }
 
     public static boolean boardIsFull(char[] board) {
@@ -71,7 +50,6 @@ public class NoughtsAndCrosses {
                 count++;
             }
         }
-
         return count > 8;
     }
 
@@ -84,14 +62,18 @@ public class NoughtsAndCrosses {
             userChoosePosition = scanner.nextInt();
             if (1 > userChoosePosition || userChoosePosition > 9) {
                 System.out.println("your number is wrong, please try again : ");
+                continue;
+            } else if (!isAvailable(board, userChoosePosition)) {
+                System.out.println("this position is occupied");
+                continue;
             } else {
-                if (!isAvailable(board, userChoosePosition)) {
-                    System.out.println("this position is occupied");
-                } else
-                    flag = false;
+                flag = false;
             }
             return userChoosePosition;
-        } while (isAvailable(board, userChoosePosition) && flag);
+
+        } while (isAvailable(board, userChoosePosition) || flag);
+
+        return userChoosePosition;
     }
 
     public static boolean placeSymbolOnBoard(char[] board, int position, char whichPlayer) {
@@ -135,28 +117,22 @@ public class NoughtsAndCrosses {
     public static void main(String[] args) {
         char symbol = 'X';
         char[] board = {'-', '-', '-', '-', '-', '-', '-', '-', '-'};
-        boolean player1 = true;
         boolean gameOver = false;
 
         while (!gameOver && !boardIsFull(board)) {
-
-            if (placeSymbolOnBoard(board, getPositionFromUser(board), symbol)) {
-                System.out.println("player " + checkWinner(board) + " has won");
-                gameOver = true;
-            } else if (player1) {
+            if (!placeSymbolOnBoard(board, getPositionFromUser(board), symbol)) {
+                if (boardIsFull(board)) {
+                    System.out.println("-");
+                }
                 if (symbol == 'X') {
                     symbol = 'O';
                 } else {
                     symbol = 'X';
-                    player1 = false;
                 }
-
-            } else if (boardIsFull(board)) {
-                System.out.println("it's draw, start a new game");
+            } else {
+                System.out.println("player " + checkWinner(board) + " has won");
+                gameOver = true;
             }
-
         }
-
     }
-
 }
